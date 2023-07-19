@@ -9,10 +9,59 @@ body {
 
 /* Header styles */
 header {
-    background-color: #333;
-    padding: 20px;
-    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 1rem;
 }
+
+/* Logo and tagline in header styles*/
+.header-content {
+    display: flex;
+    flex-direction: column;
+    /* Stack elements vertically */
+    align-items: flex-start;
+    /* Align elements to the left */
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+.header-content p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+/* Login form styles*/
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    /* Stack input elements vertically */
+    align-items: flex-end;
+    /* Align the form to the right */
+}
+
+.login-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form input,
+.login-form button {
+    margin: 0.25rem 0;
+    padding: 0.25rem;
+}
+
+.login-form a {
+    text-decoration: none;
+    color: #333;
+}
+
 
 /* Hero section styles */
 .hero {
@@ -177,9 +226,14 @@ header {
 }
 
 
+
+
 /* Responsive styles */
 @media (max-width: 768px) {
+
     .feature {
         margin-bottom: 30px;
     }
+
+
 }

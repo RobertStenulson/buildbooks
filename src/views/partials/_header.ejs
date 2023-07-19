@@ -1,5 +1,21 @@
 <body>
     <header>
-        <h1>BuildBooks</h1>
-        <p>Your Construction Project Management Solution</p>
+        <div class="header-content">
+            <h1>BuildBooks</h1>
+            <p>Your Construction Project Management Solution</p>
+        </div>
+
+        <% if (!userIsLoggedIn) { %>
+            <!-- Add the login form here -->
+
+            <div class="login-form">
+                <form action="/login" method="post">
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <a href="/signup">Sign Up</a>
+            </div>
+
+            <% } %>
     </header>
