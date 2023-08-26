@@ -1,39 +1,37 @@
-<%- include('partials/_head') %>
-    <%- include('partials/_header') %>
+<% layout('layout.ejs') %>
 
-        <section class="hero">
-            <h1>Effortlessly Manage Your Projects</h1>
-            <p>BuildBooks is a comprehensive platform that helps handymen and construction companies keep track of their
-                projects, estimates, finances, and more.</p>
-            <a href="/signup" class="btn btn-primary">Get Started</a>
-        </section>
+    <section class="hero">
+        <h1>Effortlessly Manage Your Projects</h1>
+        <p>BuildBooks is a comprehensive platform that helps handymen and construction companies keep track of their
+            projects, estimates, finances, and more.</p>
+        <a href="/signup" class="btn btn-primary">Get Started</a>
+    </section>
 
-        <section class="features">
-            <div class="feature">
-                <i class="fas fa-file-alt"></i>
-                <h3>Create Estimates</h3>
-                <p>Effortlessly generate accurate estimates for your customers, complete with project details and costs.
-                </p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-chart-line"></i>
-                <h3>Track Finances</h3>
-                <p>Monitor project expenses, track income, and easily calculate your estimated profit or loss.</p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-paint-brush"></i>
-                <h3>Customization Options</h3>
-                <p>Personalize your estimates, contracts, and other documents to reflect your unique style and branding.
-                </p>
-            </div>
-            <div class="feature">
-                <i class="fas fa-lock"></i>
-                <h3>Secure Data Handling</h3>
-                <p>Rest assured that your project details, customer information, and financial data are kept secure and
-                    confidential.</p>
-            </div>
-        </section>
+    <section class="features">
+        <div class="feature">
+            <i class="fas fa-file-alt"></i>
+            <h3>Create Estimates</h3>
+            <p>Effortlessly generate accurate estimates for your customers, complete with project details and costs.
+            </p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-chart-line"></i>
+            <h3>Track Finances</h3>
+            <p>Monitor project expenses, track income, and easily calculate your estimated profit or loss.</p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-paint-brush"></i>
+            <h3>Customization Options</h3>
+            <p>Personalize your estimates, contracts, and other documents to reflect your unique style and branding.
+            </p>
+        </div>
+        <div class="feature">
+            <i class="fas fa-lock"></i>
+            <h3>Secure Data Handling</h3>
+            <p>Rest assured that your project details, customer information, and financial data are kept secure and
+                confidential.</p>
+        </div>
+    </section>
 
 
-        <%- include('partials/_pricingPlans') %>
-            <%- include('partials/_footer') %>
+    <%- include('partials/_pricingPlans') %>

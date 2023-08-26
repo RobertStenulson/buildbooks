@@ -12,3 +12,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
 </head>
+
+<body>
+    <div class="page-container">
+        <%- include('./partials/_header') %>
+
+            <div class="content">
+                <!-- This is where the content of individual views will be inserted -->
+                <%- body %>
+            </div>
+
+            <%- include('./partials/_footer') %>
+
+                <script src="/js/public.js"></script>
+
+    </div>
+</body>
+
+</html>
