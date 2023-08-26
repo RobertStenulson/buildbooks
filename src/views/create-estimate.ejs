@@ -1,0 +1,289 @@
+<% layout('layout.ejs') %>
+
+
+    <main class="estimate-page">
+        <div class="estimate-form-container">
+            <h1>Create Estimate</h1>
+
+            <form class="estimate-form" id="estimateForm" action="/estimates" method="POST">
+
+                <div class="form-section">
+                    <h2>Customer Information</h2>
+
+                    <div class="form-select">
+                        <label for="customerType">Customer Type:</label>
+                        <select id="customerType" name="customerType" required>
+                            <option value="" selected>Select Customer Type</option>
+                            <option value="home">Home</option>
+                            <option value="business">Business</option>
+                        </select>
+                    </div>
+                    <div id="businessNameGroup" style="display: none;">
+                        <label for="businessName">Business Name:</label>
+                        <input type="text" id="businessName" name="businessName">
+                    </div>
+
+                    <div class="contact-info">
+                        <h3>Contact Information</h3>
+
+                        <div class="contact-fields">
+
+                            <div class="form-group contact-field-container">
+
+                                <div class="contact-field">
+                                    <label for="contactName">Name:</label>
+                                    <input type="text" class="contactName" name="contactName[]" required>
+                                </div>
+                                <div class="contact-field">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="email" name="email[]"
+                                        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+                                </div>
+                                <div class="contact-field">
+                                    <label for="phoneNumber">Phone:</label>
+                                    <input type="tel" class="phoneNumber" name="phoneNumber[]" inputmode="numeric"
+                                        maxlength="14" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-section">
+                        <h2>Project Details</h2>
+
+                        <div class="form-group">
+                            <label for="projectDescription">Project Description:</label>
+                            <textarea id="projectDescription" name="projectDescription" rows="5"
+                                class="description-text expandable-textarea"></textarea>
+                        </div>
+
+                        <div class="estimated-dates form-group">
+                            <div class="estimated-start-date">
+                                <label for="startDate">Estimated Start Date:</label>
+                                <input type="date" id="estimatedStartDate" name="startDate" autocomplete='off'>
+                            </div>
+                            <div class="estimated-days">
+                                <label for="daysToComplete">Estimated Days to Complete:</label>
+                                <input type="number" id="daysToComplete" name="daysToComplete" min="0"
+                                    autocomplete='off'>
+                            </div>
+                            <div class="estimated-end-date">
+                                <label for="endDate">Estimated End Date:</label>
+                                <input type="date" id="estimatedEndDate" name="endDate" autocomplete='off'>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-section">
+                        <h2>Costs</h2>
+
+                        <div class="cost-header">
+                            <span class="cost-label">Cost Name</span>
+                            <span class="qty-label">Qty</span>
+                            <span class="cost-per-unit-label">Cost/Unit ($)</span>
+                            <span class="total-cost-label">Total</span>
+                        </div>
+
+                        <div class="project-cost-items">
+                            <div class="project-cost-item">
+                                <input type="text" class="cost-name" name="costName[]" placeholder="E.g.: 'Labor'">
+                                <input type="number" class="cost-qty" name="costQty[]" placeholder="Qty"
+                                    autocomplete='off'>
+                                <input type="number" class="cost-per-unit" name="costPerUnit[]" placeholder="Cost/Unit"
+                                    autocomplete='off'>
+                                <span class="total-cost">$0.00</span>
+                                <button class="delete-cost-button" type="button"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+
+                        <button class="add-cost-button" type="button"><i class="fas fa-plus"></i></button>
+
+                        <div class="subtotal-section">
+                            <strong>Subtotal:</strong> <span id="subtotal-amount">$0.00</span>
+                        </div>
+
+                        <div class="discount-section">
+                            <label for="discountType"><strong>Discount:</strong></label>
+                            <select id="discountType" name="discountType">
+                                <option value="fixed">Fixed Amount ($)</option>
+                                <option value="percentage">Percentage (%)</option>
+                            </select>
+                            <input type="number" id="discountValue" name="discountValue" autocomplete='off'>
+                            <span id="totalDiscount">$0.00</span>
+                        </div>
+
+                        <div class="project-cost-display">
+                            <strong>Total Project Cost: </strong><span id="projectCostTotal">$0.00</span>
+                        </div>
+                    </div>
+
+
+
+                    <button class="submit-button" type="submit">Create Estimate</button>
+            </form>
+        </div>
+    </main>
+
+
+
+
+    <script>
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            //Logic for Business Name Field:                     *******************************
+            const customerTypeSelect = document.getElementById('customerType');
+            const businessNameGroup = document.getElementById('businessNameGroup');
+
+            customerTypeSelect.addEventListener('change', () => {
+                if (customerTypeSelect.value === 'business') {
+                    businessNameGroup.style.display = 'block';
+                } else {
+                    businessNameGroup.style.display = 'none';
+                }
+            });
+        });
+
+        // Logic for the Estimated Date Fields            *************************************
+        // Get references to the input fields
+        const startDateInput = document.getElementById('estimatedStartDate');
+        const daysToCompleteInput = document.getElementById('daysToComplete');
+        const endDateInput = document.getElementById('estimatedEndDate');
+
+        // Event listener to update end date when start date and days to complete change
+        startDateInput.addEventListener('change', updateEndDateFromStartAndDays);
+        daysToCompleteInput.addEventListener('change', updateEndDateFromStartAndDays);
+
+        // Event listener to update days to complete when start date and end date change
+        startDateInput.addEventListener('change', updateDaysToCompleteFromStartAndEnd);
+        endDateInput.addEventListener('change', updateDaysToCompleteFromStartAndEnd);
+
+
+        function updateEndDateFromStartAndDays() {
+            const startDate = new Date(startDateInput.value);
+            const daysToComplete = parseInt(daysToCompleteInput.value);
+            if (startDate && daysToComplete) {
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + daysToComplete);
+                endDateInput.value = endDate.toISOString().substr(0, 10);
+            }
+        }
+
+        function updateDaysToCompleteFromStartAndEnd() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+            if (startDate && endDate) {
+                const daysToComplete = Math.floor((endDate - startDate) / (24 * 60 * 60 * 1000));
+                daysToCompleteInput.value = daysToComplete;
+            }
+        }
+
+
+
+        // Add Cost Item Row                                         ******************************
+
+        const projectCostItems = document.querySelector('.project-cost-items');
+        const addCostButton = document.querySelector('.add-cost-button');
+
+        // Event listener for the "Add Cost" button
+        addCostButton.addEventListener('click', () => {
+            // Create a new cost item row
+            const newCostItem = document.createElement('div');
+            newCostItem.classList.add('project-cost-item');
+
+            // Fill the cost item row with input fields
+            newCostItem.innerHTML = `
+        <input type="text" class="cost-name" name="costName[]" placeholder="Cost Name">
+        <input type="number" class="cost-qty" name="costQty[]" placeholder="Qty">
+        <input type="number" class="cost-per-unit" name="costPerUnit[]" placeholder="Cost/Unit">
+        <span class="total-cost">$0.00</span>
+        <button class="delete-cost-button" type="button"><i class="fas fa-trash"></i></button>`;
+
+            // Append the new cost item row to the list
+            projectCostItems.appendChild(newCostItem);
+        });
+
+
+        // Calculate row total when quantity or cost per unit changes ****************************
+
+        projectCostItems.addEventListener('input', (event) => {
+            if (event.target.classList.contains('cost-qty') || event.target.classList.contains('cost-per-unit')) {
+                const costItem = event.target.closest('.project-cost-item');
+                const qty = parseFloat(costItem.querySelector('.cost-qty').value) || 0;
+                const costPerUnit = parseFloat(costItem.querySelector('.cost-per-unit').value) || 0;
+                const totalCost = qty * costPerUnit;
+
+                costItem.querySelector('.total-cost').textContent = formatCurrency(totalCost);
+
+                updateSubtotalDisplay()
+                updateTotalDiscount()
+            }
+        });
+
+        // Calc Subtotal *****************************************************************
+
+        const calculateSubtotal = () => {
+            const totalCosts = document.querySelectorAll('.total-cost');
+            let subtotal = 0;
+            totalCosts.forEach(totalCost => {
+                const value = parseFloat(totalCost.textContent.replace('$', '').replace(',', ''));
+                if (!isNaN(value)) {
+                    subtotal += value;
+                }
+            });
+
+            return subtotal;
+        };
+
+        const updateSubtotalDisplay = () => {
+            const subtotalAmount = document.getElementById('subtotal-amount');
+            const subtotal = calculateSubtotal();
+            subtotalAmount.textContent = formatCurrency(subtotal);
+        };
+
+
+        // Calc. Discount Section
+
+        // Add event listeners for discount type and value inputs
+        const discountTypeInput = document.getElementById('discountType');
+        const discountValueInput = document.getElementById('discountValue');
+
+        discountTypeInput.addEventListener('change', updateTotalDiscount);
+        discountValueInput.addEventListener('input', updateTotalDiscount);
+
+        // Function to calculate and update the total discount
+        function updateTotalDiscount() {
+            const subtotal = calculateSubtotal();
+            const discountType = discountTypeInput.value;
+            const discountValue = parseFloat(discountValueInput.value);
+
+            let totalDiscount = 0;
+
+            if (discountType === 'fixed') {
+                totalDiscount = discountValue || 0;
+            } else if (discountType === 'percentage') {
+                totalDiscount = (subtotal * discountValue) / 100 || 0;
+            }
+
+            const totalDiscountDisplay = document.getElementById('totalDiscount');
+            totalDiscountDisplay.textContent = formatCurrency(totalDiscount);
+
+            updateProjectCostTotal(subtotal, totalDiscount);
+        }
+
+        // Function to update project cost total
+        function updateProjectCostTotal(subtotal, totalDiscount) {
+            const projectCostTotalDisplay = document.getElementById('projectCostTotal');
+            const projectCostTotal = subtotal - totalDiscount;
+
+            projectCostTotalDisplay.textContent = formatCurrency(projectCostTotal);
+        }
+
+
+
+
+
+    </script>

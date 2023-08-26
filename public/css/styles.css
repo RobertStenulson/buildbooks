@@ -7,22 +7,45 @@ body {
     padding: 0;
 }
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+}
+
+/* Target all input elements */
+input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: .3rem;
+}
+
+textarea {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: .5rem;
+    resize: none;
+}
+
+
 /* Header styles */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0;
     padding: 1rem;
+    background-color: #333;
 }
 
 /* Logo and tagline in header styles*/
 .header-content {
     display: flex;
     flex-direction: column;
-    /* Stack elements vertically */
     align-items: flex-start;
-    /* Align elements to the left */
 }
 
 .header-content h1 {
@@ -36,32 +59,44 @@ header {
     color: #888;
 }
 
-/* Login form styles*/
-
-.login-form {
+/* Styling for the navigation links */
+nav {
     display: flex;
-    flex-direction: column;
-    /* Stack input elements vertically */
-    align-items: flex-end;
-    /* Align the form to the right */
+    justify-content: space-between;
+    align-items: center;
 }
 
-.login-form form {
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
-    flex-direction: column;
 }
 
-.login-form input,
-.login-form button {
-    margin: 0.25rem 0;
-    padding: 0.25rem;
+nav ul li {
+    margin-left: 20px;
 }
 
-.login-form a {
+nav ul li:first-child {
+    margin-left: 0;
+}
+
+nav ul li a {
+    color: #fff;
     text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+/* Styling for the active link */
+nav ul li.active a {
+    background-color: #fff;
     color: #333;
 }
-
 
 /* Signup page styles */
 .signup-page {
@@ -167,8 +202,6 @@ header {
 .login-form-container input {
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     width: 100%;
 }
 
@@ -199,6 +232,56 @@ header {
 
 .login-form-container a:hover {
     text-decoration: underline;
+}
+
+/* Styles for the forgot password page */
+.forgot-password-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.forgot-password-form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+
+.forgot-password-form-container h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.forgot-password-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.forgot-password-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.forgot-password-form input[type="email"] {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.forgot-password-form button[type="submit"] {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.forgot-password-form button[type="submit"]:hover {
+    background-color: #0056b3;
 }
 
 
@@ -310,10 +393,157 @@ header {
 }
 
 
+/* Style for the estimate form */
+.estimate-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.estimate-form-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-select {
+    margin-bottom: 1rem;
+}
+
+.contact-field-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 1rem;
+    /* Adjust the gap between contact fields */
+}
+
+.contact-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-field label {
+    min-width: 3.5rem;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.description-text {
+    margin-bottom: 1rem;
+}
+
+.estimated-dates div label {
+    display: inline-block;
+    width: 14rem;
+}
+
+.estimated-dates div input {
+    display: inline-block;
+    width: 9rem;
+}
+
+.cost-header {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    font-weight: bold;
+    margin-top: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.cost-header span {
+    text-align: center;
+}
+
+.project-cost-item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.project-cost-item input[type="text"],
+.project-cost-item input[type="number"] {
+    width: 100%;
+}
+
+.cost-qty,
+.cost-per-unit {
+    text-align: center;
+}
+
+.total-cost {
+    text-align: right;
+}
+
+
+.delete-cost-button,
+.add-cost-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.add-cost-button {
+    display: block;
+    margin-top: 10px;
+}
+
+.delete-cost-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subtotal-section,
+.project-cost-display {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.project-cost-display {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.discount-section {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    gap: 1rem;
+    padding-top: 10px;
+}
+
+#totalDiscount {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+
+
 /* Add styling for the footer section */
 
 .footer {
-    background-color: #333333;
+    background-color: #333;
     color: #ffffff;
     padding: 30px 0;
 }
