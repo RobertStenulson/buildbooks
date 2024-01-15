@@ -1,0 +1,146 @@
+<% layout('layout.ejs') %>
+
+
+    <main class="estimate-page">
+        <div class="estimate-form-container">
+            <section class="estimate-header">
+                <div class="company-info">
+                    <h2>Company Name</h2>
+                    <p>Address: 123 Main St, City, State, ZIP</p>
+                    <p>Phone: (123) 456-7890</p>
+                    <p>Email: company@example.com</p>
+                </div>
+                <div>
+                    <div class="estimate-title">
+                        <h1>Work Estimate</h1>
+                        <p>Estimate # <%= estimate.estimateNumber %>
+                        </p>
+                        <p>Date: <% function formatDate(date) { %>
+                                <% const options={ year: '2-digit' , month: '2-digit' , day: '2-digit' }; %>
+                                    <% return new Date(date).toLocaleDateString(undefined, options); %>
+                                        <% } %>
+                                            <% const formattedDate=formatDate(estimate.dateCreated); %>
+                                                <%= formattedDate %>
+                        </p>
+                    </div>
+            </section>
+
+            <div class="form-section">
+                <h3>Customer Information</h3>
+                <div class="contact-info">
+                    <div class="contact-fields">
+                        <% if (customer.businessName) { %>
+                            <p>
+                                <%= customer.businessName %>
+                            </p>
+                            <% } else { %>
+                                <p>Home</p>
+                                <% } %>
+                                    <p>
+                                        <%= customer.firstName %>
+                                            <%= customer.lastName %>
+                                    </p>
+                                    <p>
+                                        <%= customer.email %>
+                                    </p>
+                                    <p>
+                                        <%= customer.phoneNumber %>
+                                    </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-section">
+                <h2>Project Details</h2>
+
+                <div class="form-group">
+                    <label for="projectDescription">Project Description:</label>
+                    <textarea id="projectDescription" name="projectDescription" rows="5"
+                        class="description-text expandable-textarea"
+                        readonly><%= estimate.projectDescription %></textarea>
+                </div>
+
+                <div class="estimated-dates form-group">
+                    <div class="estimated-start-date">
+                        <label for="startDate">Estimated Start Date:</label>
+                        <p>
+                            <%= estimate.startDate %>
+                        </p>
+                    </div>
+                    <div class="estimated-days">
+                        <label for="daysToComplete">Estimated Days to Complete:</label>
+                        <p>
+                            <%= estimate.daysToComplete %>
+                        </p>
+                    </div>
+                    <div class="estimated-end-date">
+                        <label for="endDate">Estimated End Date:</label>
+                        <p>
+                            <%= estimate.endDate %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-section">
+                <h3>Costs</h3>
+
+                <div class="cost-header">
+                    <span class="cost-label">Cost Name</span>
+                    <span class="qty-label">Qty</span>
+                    <span class="cost-per-unit-label">Cost/Unit ($)</span>
+                    <span class="total-cost-label">Total</span>
+                </div>
+
+                <div class="project-cost-items">
+                    <% estimate.costNames.forEach((cost, index)=> { %>
+                        <div class="project-cost-item">
+                            <span class="cost-name">
+                                <%= estimate.costNames[index] %>
+                            </span>
+                            <span class="cost-qty">
+                                <%= estimate.costQtys[index] %>
+                            </span>
+                            <span class="cost-per-unit">
+                                <%= estimate.costPerUnits[index] %>
+                            </span>
+                            <span class="total-cost">
+                                <%= estimate.costRowTotals[index] %>
+                            </span>
+                        </div>
+                        <% }) %>
+                </div>
+
+                <div class="subtotal-section">
+                    <strong>Subtotal:</strong> <input id="subtotal-amount" name="subtotal" class="styled-input"
+                        autocomplete='off' readonly value="<%= estimate.subtotal %>">
+                </div>
+                <% if (customer.discountTotal) { %>
+                    <div class="discount-section">
+                        <label for="discountType"><strong>Discount:</strong></label>
+                        <select id="discountType" name="discountType">
+                            <option value="" selected>Select Discount Type</option>
+                            <option value="fixed" <%=(estimate.discountType==='fixed' ) ? 'selected' : '' %>
+                                >Fixed Amount ($)</option>
+                            <option value="percentage" <%=(estimate.discountType==='percentage' ) ? 'selected' : '' %>
+                                >Percentage (%)</option>
+                        </select>
+                        <input type="number" id="discountValue" name="discountValue" autocomplete='off'
+                            value="<%= estimate.discountValue %>">
+                        <input id="totalDiscount" placeholder="$0.00" name="discountTotal" class="styled-input"
+                            autocomplete='off' readonly value="<%= estimate.discountTotal %>">
+                    </div>
+                    <% } %>
+                        <div class="project-cost-display">
+                            <strong>Total Project Cost: </strong><input id="projectCostTotal" name="totalProjectCost"
+                                class="styled-input" autocomplete='off' readonly
+                                value="<%= estimate.totalProjectCost %>">
+                        </div>
+            </div>
+            <div class="disclaimer">
+                <p>This estimate is for informational purposes only and is not a contract or a bill.</p>
+            </div>
+        </div>
+    </main>
