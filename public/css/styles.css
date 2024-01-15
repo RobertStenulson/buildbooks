@@ -31,6 +31,18 @@ textarea {
     resize: none;
 }
 
+/* Style the input to look like a span */
+.styled-input {
+    border: none;
+    background-color: transparent;
+    color: inherit;
+    cursor: default;
+    outline: none;
+    text-align: right;
+    font-weight: inherit;
+}
+
+
 
 /* Header styles */
 header {
@@ -482,6 +494,10 @@ nav ul li.active a {
     width: 100%;
 }
 
+.cost-name {
+    padding-left: 1rem;
+}
+
 .cost-qty,
 .cost-per-unit {
     text-align: center;
@@ -512,11 +528,13 @@ nav ul li.active a {
 
 .subtotal-section,
 .project-cost-display {
-    margin-top: 20px;
+    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
+    border-top: 1px solid #ddd;
+    padding-top: 2rem;
 }
 
 .project-cost-display {
@@ -538,6 +556,10 @@ nav ul li.active a {
     font-weight: bold;
 }
 
+.estimate-header {
+    display: flex;
+    justify-content: space-between;
+}
 
 
 /* Add styling for the footer section */
