@@ -1,0 +1,232 @@
+<% layout('layout.ejs') %>
+    <!-- estimates.ejs -->
+    <div class="estimate-list">
+        <div class="header">
+            <h1>Estimates</h1>
+            <a class="create-button" href="/create-estimate"><i class="fa fa-plus"></i> Create
+                Estimate</a>
+        </div>
+        <div class="estimate-headers">
+            <div class="header-item" onclick="sortEstimates('date')">Date Created</div>
+            <div class="header-item" onclick="sortEstimates('number')">Estimate Number</div>
+            <div class="header-item" onclick="sortEstimates('name')">Last Name / Business Name</div>
+            <div class="header-item">Actions</div>
+        </div>
+        <div class="estimate-items" id="estimate-items">
+            <% estimatesData.forEach(estimate=> { %>
+                <div class="estimate-item" data-estimate-id="<%= estimate.estimate._id %>">
+                    <div class="view-estimate" data-estimate-id="<%= estimate.estimate._id %>">
+
+                        <div class="item-content">
+                            <% function formatDate(date) { %>
+                                <% const options={ year: '2-digit' , month: '2-digit' , day: '2-digit' }; %>
+                                    <% return new Date(date).toLocaleDateString(undefined, options); %>
+                                        <% } %>
+                                            <% const formattedDate=formatDate(estimate.estimate.dateCreated); %>
+                                                <%= formattedDate %>
+                        </div>
+
+                        <div class="item-content">
+                            <%= estimate.estimate.estimateNumber %>
+                        </div>
+                        <div class="item-content">
+                            <%= estimate.customer.lastName || estimate.customer.businessName %>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="createWorkOrder('<%= estimate.estimate._id %>')" class="action-button"
+                            title="Create Work Order"><i class="fa fa-file"></i></button>
+                        <button onclick="sendEmail('<%= estimate.estimate._id %>')" class="action-button"
+                            title="Send As PDF"><i class="fa fa-paper-plane"></i></button>
+                        <button onclick="editEstimate('<%= estimate.estimate._id %>')" class="action-button"
+                            title="Edit Estimate"><i class="fa fa-edit"></i></button>
+                        <button onclick="confirmDelete('<%= estimate.estimate._id %>')" class="delete-button"
+                            title="Delete Estimate"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+    </div>
+
+
+    <style>
+        /* CSS for estimates list with Grid */
+        .estimate-list {
+            margin: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 10px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .create-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .estimate-headers {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) 0.5fr;
+            background-color: #f0f0f0;
+            padding: 10px 0;
+        }
+
+        .header-item {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .estimate-items {
+            display: grid;
+            grid-gap: 10px;
+        }
+
+        .estimate-item {
+            display: grid;
+            grid-template-columns: 3fr 0.5fr;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .view-estimate {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr)
+        }
+
+        .item-content {
+            text-align: center;
+            align-self: center;
+        }
+
+        .item-actions {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .action-button,
+        .delete-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background-color: red;
+        }
+    </style>
+
+    <script>
+
+
+
+        // Add an event listener to all elements with the class "view-estimate"
+        document.querySelectorAll('.view-estimate').forEach(function (element) {
+            element.addEventListener('click', function () {
+                // Get the value of the "data-id" attribute
+                const estimateId = element.getAttribute('data-estimate-id');
+
+                // Construct the URL for the details page
+                const url = `/estimates/${estimateId}`;
+
+                // Navigate to the details page
+                window.location.href = url;
+            });
+        });
+
+        // Add click event listeners to the buttons
+        document.querySelectorAll('.item-actions').forEach(function (element) {
+            element.addEventListener('click', event => {
+                const button = event.target.closest('button');
+                if (!button) return;
+
+                const estimateItem = button.closest('.estimate-item');
+                if (!estimateItem) return;
+
+                const estimateId = estimateItem.getAttribute('data-estimate-id');
+                if (!estimateId) return;
+
+                if (button.classList.contains('send-email-button')) {
+                    // Handle send email button click
+                    sendEmail(estimateId);
+                } else if (button.classList.contains('edit-button')) {
+                    // Handle edit button click
+                    editEstimate(estimateId);
+                } else if (button.classList.contains('delete-button')) {
+                    // Handle delete button click
+                    confirmDelete(estimateId);
+                }
+            });
+        });
+
+        function sendEmail(estimateId) {
+            // Implement sending email logic here
+            console.log(`Sending email for estimate ${estimateId}`);
+        }
+
+        function editEstimate(estimateId) {
+            // Implement edit estimate logic here
+            window.location.href = `/estimates/${estimateId}/edit`
+        }
+
+        function confirmDelete(estimateId) {
+            const confirmDelete = confirm('Are you sure you want to delete this estimate?');
+            if (confirmDelete) {
+                // Implement delete estimate logic here
+                fetch(`/estimates/${estimateId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Reload the page to reflect the updated estimates list
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete estimate.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting estimate:', error);
+                        alert('Error deleting estimate. Please try again later.');
+                    });
+            }
+        }
+
+        // Format Date
+
+        function formatDateTimeToMMDDYY(date) {
+            // Ensure the input is a Date object
+            if (!(date instanceof Date)) {
+                date = new Date(date);
+            }
+
+            // Get individual date and time components
+            const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+            const day = date.getDate().toString().padStart(2, '0');
+            const year = date.getFullYear().toString().slice(-2); // Get the last two digits of the year
+
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+
+            // Combine components into the desired format
+            return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+        }
+
+
+
+    </script>
