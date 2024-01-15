@@ -87,21 +87,6 @@ passport.use(new LocalStrategy({
 ));
 
 
-// test
-// passport.use(new LocalStrategy({
-//     usernameField: 'email',
-// }, (email, password, done) => {
-//     const user = { id: 1, email: 'testuser@email.com', password: 'testpassword' };
-
-//     // Check if the email exists in the user object and if the password matches
-//     if (email !== user.email || password !== user.password) {
-//         return done(null, false, { message: 'Incorrect email or password.' });
-//     }
-
-//     // If both email and password match, authentication is successful
-//     return done(null, user);
-// }));
-
 // Import the routes from "index.js"
 const routes = require('./src/routes/index');
 app.use('/', routes);
