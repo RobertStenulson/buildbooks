@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 });
 
 // Parse URL-encoded bodies (for form data)
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // Serialize and deserialize user
 passport.serializeUser((user, done) => {
